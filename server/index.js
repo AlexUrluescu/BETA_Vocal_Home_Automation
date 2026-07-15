@@ -2,66 +2,95 @@ import { connectDB } from "./db.js";
 import { PORT } from "./config.js";
 import app from "./app.js";
 import { Server } from "socket.io";
-import http from "http"
+import http from "http";
 import router from "./routes/posts_routes.js";
 import HeatingStatus from "./models/HeatingStatus.js";
 import HeatingTemp from "./models/HeatingTemp.js";
 
-connectDB()
+connectDB();
 
 const server = http.createServer(app);
 
 const io = new Server(server, {
-    cors:{
-        // origin: "https://smarthomeurluescu.go.ro/",
-        // origin: "https://stalwart-eclair-182177.netlify.app",
-        origin: "http://localhost:3000",
-        methods: ["GET", "POST"]
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "PUT"],
+  },
+});
+
+router.put("/update-status/:id", async (req, res) => {
+  try {
+    const updateStatus = await HeatingStatus.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
+
+    console.log("updateStatus", updateStatus);
+
+    io.emit("socket_status", updateStatus);
+
+    if (updateStatus.status === 1) {
+      return res.json({ message: "On" });
+    } else {
+      return res.json({ message: "Off" });
     }
-})
+  } catch (error) {
+    console.log(error);
+  }
+});
 
+router.post("/sendSenzorTemperatureAndHumidity", (req, res) => {
+  const data = req.body;
 
-    io.on("connection", (socket) => {
-        console.log("Conection socket");
+  io.emit("socket_temperature_And_Humidity", {
+    humidity: data.humidity,
+    temperature: data.temperature,
+  });
 
-        setInterval(async() => {
+  const response = {
+    message: "Datele de la senzori au fost primite cu succes!",
+    body: data,
+  };
 
-            const fetch_heating_status = async (req, res) => {
-                try {    
-                    const status = await HeatingStatus.find()
-                    console.log(status);
-                    socket.emit("serverMessage", status)   
-                } catch (error) {
-                    console.error(error);
-                    return res.status(500).json({message: error.message})
-                }
-            }
+  res.json(response);
+});
 
+router.put("/update-treshold/:id", async (req, res) => {
+  try {
+    const updateTreshold = await HeatingTemp.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
 
-            fetch_heating_status()
-         
-        }, 5000)
+    io.emit("socket_treshold", updateTreshold.temperature);
 
-        setImmediate( async () => {
-            
-            const fetch_heating_temp = async (req, res) => {
-                try {    
-                    const heating_temp = await HeatingTemp.find()
-                    console.log(heating_temp);
-                    socket.emit("heating_temp_server", heating_temp)   
-                    // res.send(heating_temp)
-                    
-                } catch (error) {
-                    console.error(error);
-                    return res.status(500).json({message: error.message})
-                }
-            }
+    return res.json({ message: "ok" });
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
 
-            fetch_heating_temp()
+router.put("/update-treshold-from-web/:id", async (req, res) => {
+  try {
+    const updateTreshold = await HeatingTemp.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
 
-        }, 15000)
-    })
+    if (updateTreshold) {
+      return res.json({ message: "ok" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+});
 
+io.on("connection", (socket) => {
+  console.log("a user connected" + socket.id);
+});
 
-server.listen(PORT)
+server.listen(PORT);
 console.log(`Server is running port ${PORT}`);

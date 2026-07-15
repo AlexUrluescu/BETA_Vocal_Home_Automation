@@ -1,33 +1,21 @@
-hys = 0.5
-heating_status = 1
-heating_fire = 0
 
-trash = 23
-home_temp = 22.5
+class heating_system():
+    def __init__(self, status: bool):
+        self.heating_status = status
+        self.heating_off()
+        
 
-def stop_heating_fire():
-    print("Fire is off")
-    heating_fire = 0
-
-
-def start_heating_fire():
-    print("Fire is on")
-    heating_fire = 1
+    def heating_on(self):
+        print("Heating system is ON")
+        self.heating_status = 1
+        # Also set the RP GPIO
 
 
-if(heating_status == 0):
-     print('the heating is OFF')
+    def heating_off(self):
+        print("Heating system is OFF")
+        self.heating_status = 0
 
-else:
-    if(heating_fire == 1 and home_temp >= (trash + hys)):
-        stop_heating_fire()
 
-    elif(heating_fire == 0 and home_temp <= (trash - hys)):
-        start_heating_fire()
-
-    elif(heating_fire == 0 and home_temp >= (trash - hys)):
-        print("The fire is off and the temperature will dicrease")
-
-    elif(heating_fire == 1 and home_temp < (trash + hys)):
-        print("The fire is running")
-
+    def get_heating_status(self):
+        return self.heating_status
+        # Also clear the RP GPIO

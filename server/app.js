@@ -5,17 +5,21 @@ import cors from "cors";
 
 const app = express();
 
-app.use(cors({
-    origin: 'http://localhost:3000'
+app.use(
+  cors({
+    origin: "*",
     // origin: 'https://stalwart-eclair-182177.netlify.app'
-  }))
+  })
+);
 
 // middlewares
 app.use(express.json());
-app.use(fileUpload({
+app.use(
+  fileUpload({
     useTempFiles: true,
-    tempFileDir: './upload'
-}))
+    tempFileDir: "./upload",
+  })
+);
 
 // routes
 app.use(post_routes);

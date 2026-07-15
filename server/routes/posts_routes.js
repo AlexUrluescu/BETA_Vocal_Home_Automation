@@ -1,18 +1,16 @@
-import { Router } from "express"
-import { getDataSenzors, getHeatingStatus, getHeatingTemp, changeStatus, changeHeatingTemp, testStatus, datasenzor, getSenzor} from "../controllers/post.controllers.js";
+import { Router } from "express";
+import {
+  getDataSenzors,
+  getHeatingStatus,
+  getTreshold,
+  getSenzor,
+} from "../controllers/post.controllers.js";
 
-const router = Router()
+const router = Router();
 
-router.get('/datasenzors', getDataSenzors);
-router.get('/heatingstatus', getHeatingStatus);
-router.get('/heatingtemp', getHeatingTemp);
+router.get("/datasenzors", getDataSenzors);
+router.get("/status", getHeatingStatus);
+router.get("/treshold", getTreshold);
+router.get("/senzor", getSenzor);
 
-router.put('/changestatus/:id', changeStatus);
-router.put('/changeheatingtemp/:id', changeHeatingTemp);
-
-router.put('/test/:id', testStatus);
-
-router.post('/datasenzor', datasenzor)
-router.get('/senzor', getSenzor)
-
-export default router
+export default router;

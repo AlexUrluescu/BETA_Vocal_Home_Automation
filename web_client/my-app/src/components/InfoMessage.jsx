@@ -1,12 +1,15 @@
 import React from "react";
 
-const InfoMessage = ({ styleHeating, classStyle, textStyle, text }) => {
+const InfoMessage = ({
+  showTresholdUpdateMessage,
+  classStyle,
+  textStyle,
+  text,
+}) => {
   return (
     <div className={classStyle}>
-      {styleHeating === 1 ? (
-        <p className={textStyle}>
-          {text}
-        </p>
+      {showTresholdUpdateMessage === true ? (
+        <p className={textStyle}>{text}</p>
       ) : (
         <p> </p>
       )}

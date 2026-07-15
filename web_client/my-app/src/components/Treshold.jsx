@@ -17,7 +17,8 @@ const Treshold = ({
             : classStyle2
         }
       >
-        {heatingTemp} <sup className="text-lg">{text}</sup>
+        {/* {heatingTemp} <sup className="text-lg">{text}</sup> */}
+        <h2 className="text-6xl ml-4">{heatingTemp}<sup className="text-3xl font-semibold ml-4">{text}</sup></h2>
       </div>
     </div>
   );

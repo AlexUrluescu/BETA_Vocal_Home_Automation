@@ -1,8 +1,8 @@
 .switch{
     position: relative;
     display: inline-block;
-    width: 80px;
-    height: 40px;
+    width: 150px;
+    height: 60px;
     margin-top: 10px;
     margin-bottom: 20px;
 }
@@ -30,8 +30,8 @@
 .slider:before{
     position: absolute;
     content: "";
-    height: 26px;
-    width: 26px;
+    height: 46px;
+    width: 46px;
     left: 4px;
     bottom: 4px;
     background-color: white;
@@ -44,7 +44,7 @@ input:checked + .slider{
 }
 
 input:checked + .slider:before{
-    transform: translateX(46px);
+    transform: translateX(95px);
 }
 
 .slider.rounded{
