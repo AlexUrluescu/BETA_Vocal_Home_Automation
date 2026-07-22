@@ -1,0 +1,13 @@
+# Raspberry Pi GPIO Service Dependencies
+# Install with: pip3 install -r requirements.txt
+
+python-socketio[client]>=5.0.0
+websocket-client>=1.0.0
+requests>=2.28.0
+
+# Hardware-specific (install only on Raspberry Pi):
+# RPi.GPIO>=0.7.0
+# Adafruit_DHT>=1.4.0
+#
+# On Raspberry Pi, uncomment the above or install manually:
+#   sudo pip3 install RPi.GPIO Adafruit_DHT
