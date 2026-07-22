@@ -8,9 +8,7 @@ import {
   CustomButton,
   InfoMessage,
 } from "./components";
-
 import { AppFlow } from "./flow/flow";
-
 import io from "socket.io-client";
 
 const url = process.env.REACT_APP_SERVER_URL;
@@ -28,30 +26,32 @@ function App() {
   const [showTresholdUpdateMessage, setShowTresholdUpdateMessage] =
     useState(false);
 
-  useEffect(() => {
-    try {
-      socket.on("socket_status", (statusData) => {
-        setStatusHeating(statusData);
-      });
+  // useEffect(() => {
+  //   try {
+  //     socket.on("socket_status", (statusData) => {
+  //       setStatusHeating(statusData);
+  //     });
 
-      socket.on("socket_temperature_And_Humidity", (data) => {
-        setHumHome(data.humidity);
-        setTempHome(data.temperature);
-      });
+  //     socket.on("socket_temperature_And_Humidity", (data) => {
+  //       setHumHome(data.humidity);
+  //       setTempHome(data.temperature);
+  //     });
 
-      socket.on("socket_treshold", (data) => {
-        setTreshold(data);
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  }, []);
+  //     socket.on("socket_treshold", (data) => {
+  //       setTreshold(data);
+  //     });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }, []);
 
   useEffect(() => {
     const fetchStatus = async () => {
       const statusData = await AppFlow.fetchStatus();
 
-      setStatusHeating(statusData);
+      console.log("statusData", statusData);
+
+      setStatusHeating(statusData || {});
     };
 
     const fetchTreshold = async () => {
@@ -64,49 +64,49 @@ function App() {
     fetchTreshold();
   }, []);
 
-  useEffect(() => {
-    const timer = setTimeout(async () => {
-      setShowTresholdUpdateMessage(true);
+  // useEffect(() => {
+  //   const timer = setTimeout(async () => {
+  //     setShowTresholdUpdateMessage(true);
 
-      setTimeout(async () => {
-        try {
-          const temperature = treshold;
+  //     setTimeout(async () => {
+  //       try {
+  //         const temperature = treshold;
 
-          const id = "64889e83c192652234604219";
+  //         const id = "64889e83c192652234604219";
 
-          const data = await fetch(`${url}/update-treshold-from-web/${id}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ temperature }),
-          });
+  //         const data = await fetch(`${url}/update-treshold-from-web/${id}`, {
+  //           method: "PUT",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //           body: JSON.stringify({ temperature }),
+  //         });
 
-          const res = await data.json();
+  //         const res = await data.json();
 
-          if (res.message === "ok") {
-            setShowTresholdUpdateMessage(false);
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      }, 3000);
-    }, 5000);
+  //         if (res.message === "ok") {
+  //           setShowTresholdUpdateMessage(false);
+  //         }
+  //       } catch (error) {
+  //         console.log(error);
+  //       }
+  //     }, 3000);
+  //   }, 5000);
 
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [treshold]);
+  //   return () => {
+  //     clearTimeout(timer);
+  //   };
+  // }, [treshold]);
 
-  useEffect(() => {
-    if (statusHeating.status === 0) {
-      setIsToggled(false);
-    }
+  // useEffect(() => {
+  //   if (statusHeating.status === 0) {
+  //     setIsToggled(false);
+  //   }
 
-    if (statusHeating.status === 1) {
-      setIsToggled(true);
-    }
-  }, [statusHeating]);
+  //   if (statusHeating.status === 1) {
+  //     setIsToggled(true);
+  //   }
+  // }, [statusHeating]);
 
   const handlePLus = () => {
     const temperature = treshold + 0.5;
@@ -122,7 +122,7 @@ function App() {
     setIsToggled(!isToggled);
 
     try {
-      const id = statusHeating._id;
+      const id = statusHeating?._id;
       const status = isToggled ? 0 : 1;
 
       const statusValue = await AppFlow.updateStatus(id, status);

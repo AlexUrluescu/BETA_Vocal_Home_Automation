@@ -23,7 +23,7 @@ router.put("/update-status/:id", async (req, res) => {
     const updateStatus = await HeatingStatus.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true }
+      { new: true },
     );
 
     console.log("updateStatus", updateStatus);
@@ -56,12 +56,20 @@ router.post("/sendSenzorTemperatureAndHumidity", (req, res) => {
   res.json(response);
 });
 
+// router.get("/test-server", (req, res) => {
+//   const response = {
+//     message: "Serverul este functional!",
+//   };
+
+//   res.json(response);
+// });
+
 router.put("/update-treshold/:id", async (req, res) => {
   try {
     const updateTreshold = await HeatingTemp.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true }
+      { new: true },
     );
 
     io.emit("socket_treshold", updateTreshold.temperature);
@@ -77,7 +85,7 @@ router.put("/update-treshold-from-web/:id", async (req, res) => {
     const updateTreshold = await HeatingTemp.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true }
+      { new: true },
     );
 
     if (updateTreshold) {

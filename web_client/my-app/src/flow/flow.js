@@ -5,7 +5,10 @@ class AppFlow {
 
   fetchStatus = async () => {
     try {
-      const res = await fetch(`${this.url}/status`);
+      const server_url = process.env.REACT_APP_SERVER_URL;
+      const url = `${server_url}/status`;
+
+      const res = await fetch(url);
       const data = await res.json();
 
       return data[0];

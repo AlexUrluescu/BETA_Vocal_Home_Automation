@@ -39,7 +39,7 @@ export const changeHeatingTemp = async (req, res) => {
     const updateHeatingTemp = await HeatingTemp.findByIdAndUpdate(
       req.params.id,
       req.body,
-      { new: true }
+      { new: true },
     );
 
     return res.json({ message: "ok" });
@@ -58,7 +58,7 @@ export const testStatus = async (req, res) => {
         const updateStatus = await HeatingStatus.findByIdAndUpdate(
           req.params.id,
           req.body,
-          { new: true }
+          { new: true },
         );
 
         return res.json({ message: "On" });
@@ -71,7 +71,7 @@ export const testStatus = async (req, res) => {
         const updateStatus = await HeatingStatus.findByIdAndUpdate(
           req.params.id,
           req.body,
-          { new: true }
+          { new: true },
         );
 
         return res.json({ message: "Off" });
@@ -98,6 +98,17 @@ export const datasenzor = async (req, res) => {
 export const getSenzor = async (req, res) => {
   try {
     res.send(data_sezor);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getTestServer = async (req, res) => {
+  try {
+    const status = {
+      ok: true,
+    };
+    res.json(status);
   } catch (error) {
     console.log(error);
   }
