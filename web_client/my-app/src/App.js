@@ -26,24 +26,30 @@ function App() {
   const [showTresholdUpdateMessage, setShowTresholdUpdateMessage] =
     useState(false);
 
-  // useEffect(() => {
-  //   try {
-  //     socket.on("socket_status", (statusData) => {
-  //       setStatusHeating(statusData);
-  //     });
+  useEffect(() => {
+    try {
+      socket.on("socket_status", (statusData) => {
+        setStatusHeating(statusData);
+      });
 
-  //     socket.on("socket_temperature_And_Humidity", (data) => {
-  //       setHumHome(data.humidity);
-  //       setTempHome(data.temperature);
-  //     });
+      socket.on("socket_temperature_And_Humidity", (data) => {
+        setHumHome(data.humidity);
+        setTempHome(data.temperature);
+      });
 
-  //     socket.on("socket_treshold", (data) => {
-  //       setTreshold(data);
-  //     });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }, []);
+      socket.on("socket_treshold", (data) => {
+        setTreshold(data);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+
+    return () => {
+      socket.off("socket_status");
+      socket.off("socket_temperature_And_Humidity");
+      socket.off("socket_treshold");
+    };
+  }, []);
 
   useEffect(() => {
     const fetchStatus = async () => {
@@ -98,15 +104,15 @@ function App() {
   //   };
   // }, [treshold]);
 
-  // useEffect(() => {
-  //   if (statusHeating.status === 0) {
-  //     setIsToggled(false);
-  //   }
+  useEffect(() => {
+    if (statusHeating.status === 0) {
+      setIsToggled(false);
+    }
 
-  //   if (statusHeating.status === 1) {
-  //     setIsToggled(true);
-  //   }
-  // }, [statusHeating]);
+    if (statusHeating.status === 1) {
+      setIsToggled(true);
+    }
+  }, [statusHeating]);
 
   const handlePLus = () => {
     const temperature = treshold + 0.5;
@@ -167,7 +173,24 @@ function App() {
                 text="Temperatura este actualizata"
               />
               <div className="text-center">
-                <h2 className="text-2xl">{isToggled ? "On" : "Off"}</h2>
+                <div className="flex items-center justify-center gap-3 mb-2">
+                  <span
+                    className="led-indicator"
+                    style={{
+                      display: "inline-block",
+                      width: 16,
+                      height: 16,
+                      borderRadius: "50%",
+                      backgroundColor: isToggled ? "#444" : "#ff1744",
+                      boxShadow: isToggled
+                        ? "none"
+                        : "0 0 8px 2px rgba(255, 23, 68, 0.6)",
+                      transition: "all 0.4s ease",
+                    }}
+                    title={isToggled ? "LED Off" : "LED On (Heating Off)"}
+                  />
+                  <h2 className="text-2xl">{isToggled ? "On" : "Off"}</h2>
+                </div>
                 <Slider
                   statusHeating={statusHeating.status}
                   rounded={true}
