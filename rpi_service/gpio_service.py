@@ -46,15 +46,15 @@ class RealGPIO:
         self.GPIO.setmode(GPIO.BCM)
         self.GPIO.setwarnings(False)
         self.GPIO.setup(self.led_pin, GPIO.OUT)
-        self.GPIO.output(self.led_pin, GPIO.LOW)
+        self.GPIO.output(self.led_pin, self.GPIO.HIGH)
         log.info(f"GPIO initialized — red LED on pin {self.led_pin}")
 
     def led_on(self):
-        self.GPIO.output(self.led_pin, self.GPIO.HIGH)
+        self.GPIO.output(self.led_pin, self.GPIO.LOW)
         log.info("🔴 RED LED → ON  (heating is OFF)")
 
     def led_off(self):
-        self.GPIO.output(self.led_pin, self.GPIO.LOW)
+        self.GPIO.output(self.led_pin, self.GPIO.HIGH)
         log.info("⚫ RED LED → OFF (heating is ON)")
 
     def cleanup(self):
